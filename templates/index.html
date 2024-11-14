@@ -129,7 +129,7 @@ understanding of backend integration. #}
                 {% for value in row[1] %}
                     <td>
                         {% if value is number %}
-                            {{ '%.2f' % value }}  <!-- Formats the value to 2 decimal places -->
+                            {{ '%.2f' % value }}  <!-- Formats monetary values to 2 decimal places -->
                         {% else %}
                             {{ value }}  <!-- Non-numeric values are not changed -->
                         {% endif %}
