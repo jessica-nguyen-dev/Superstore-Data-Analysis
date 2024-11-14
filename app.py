@@ -18,7 +18,7 @@ def index():
     regions = df['Region'].unique()
     segments = df['Segment'].unique()
 
-    # Set the default result (an empty value)
+    # Set the default result (an empty series)
     query_result = None
 
     # According to ChatGPT, a POST request means that the form was submitted. Therefore, if request.method == 'POST':
