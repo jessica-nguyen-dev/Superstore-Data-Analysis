@@ -1,8 +1,8 @@
 from flask import Flask, render_template, request
 import pandas as pd
 
-# openpyxl allows Pandas to read Excel data and retrieve the company's sales information. This technique was suggested
-# by ChatGPT to keep the data's original format, instead of changing it to CSV, in order to prevent errors.
+# openpyxl allows Pandas to read Excel data and retrieve the company's sales information.
+# This keeps the data's original format, which is better than changing it to a CSV file, in order to prevent corruption.
 app = Flask(__name__)
 df = pd.read_excel('data/TableauSalesData.xlsx', engine='openpyxl')
 
