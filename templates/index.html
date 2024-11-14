@@ -1,0 +1,148 @@
+
+{# We used ChatGPT to gain a basic understanding of HTML, then, with it's guidance, created an html template, making
+sure to understand how the code here connects to the Python/Flask based backend. Therefore, a significant portion of
+this code was generated partially by AI. #}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Specifies the character encoding for the document -->
+    <meta charset="UTF-8">
+
+    <!-- Ensures the page is responsive on different screen sizes -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Title of the page that will appear in the browser tab -->
+    <title>Superstore Data Analysis</title>
+
+    <!-- Links to the external CSS file we made previously for styling (style.css) -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <!-- Header of the page -->
+    <h1> Superstore Data Analysis &#9786;</h1>
+
+    <!-- Form that submits a POST request when the user selects filters and clicks submit -->
+    <!-- This is connected to the "if request.method == 'POST':" statement in the app.py file!! -->
+    <form method="POST">
+
+        <!-- Category dropdown menu -->
+        <label for="category">Category:</label>
+        <select id="category" name="category">  <!-- The name attribute is what is used to send the selected value to the backend when the form is submitted -->
+            <!-- Default option when no category is selected -->
+            <option value="" {% if not request.form.get('category') %} selected {% endif %}>Select Category</option>
+
+            <!-- Loop through categories and add each to the dropdown, selecting the one that matches the form input -->
+            {% for category in categories %}
+                <option value="{{ category }}" {% if category == request.form.get('category') %} selected {% endif %}>
+                    {{ category }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <!-- Sub-Category dropdown menu -->
+        <label for="subcategory">Sub-Category:</label>
+        <select id="subcategory" name="subcategory">
+            <!-- Default option when no subcategory is selected -->
+            <option value="" {% if not request.form.get('subcategory') %} selected {% endif %}>Select Sub-Category</option>
+
+            <!-- Loop through subcategories and add each to the dropdown, selecting the one that matches the form input -->
+            {% for subcategory in subcategories %}
+                <option value="{{ subcategory }}" {% if subcategory == request.form.get('subcategory') %} selected {% endif %}>
+                    {{ subcategory }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <!-- Region dropdown menu -->
+        <label for="region">Region:</label>
+        <select id="region" name="region">
+            <!-- Default option when no region is selected -->
+            <option value="" {% if not request.form.get('region') %} selected {% endif %}>Select Region</option>
+
+            <!-- Loop through regions and add each to the dropdown, selecting the one that matches the form input -->
+            {% for region in regions %}
+                <option value="{{ region }}" {% if region == request.form.get('region') %} selected {% endif %}>
+                    {{ region }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <!-- Segment dropdown menu -->
+        <label for="segment">Segment:</label>
+        <select id="segment" name="segment">
+            <!-- Default option when no segment is selected -->
+            <option value="" {% if not request.form.get('segment') %} selected {% endif %}>Select Segment</option>
+
+            <!-- Loop through segments and add each to the dropdown, selecting the one that matches the form input -->
+            {% for segment in segments %}
+                <option value="{{ segment }}" {% if segment == request.form.get('segment') %} selected {% endif %}>
+                    {{ segment }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <!-- Query Type dropdown menu -->
+        <label for="query_type">Query Type:</label>
+        <select id="query_type" name="query_type">
+            <!-- Default option when no query type is selected -->
+            <option value="" {% if not request.form.get('query_type') %} selected {% endif %}>Select Query Type</option>
+
+            <!-- Each query option with its corresponding value, checking if it's selected based on the form input -->
+            <option value="total_sales_profit" {% if request.form.get('query_type') == 'total_sales_profit' %} selected {% endif %}>
+                Total Sales and Profit
+            </option>
+            <option value="avg_discount_by_product" {% if request.form.get('query_type') == 'avg_discount_by_product' %} selected {% endif %}>
+                Average Discount by Product
+            </option>
+            <option value="total_sales_by_year" {% if request.form.get('query_type') == 'total_sales_by_year' %} selected {% endif %}>
+                Total Sales by Year
+            </option>
+            <option value="profit_by_region" {% if request.form.get('query_type') == 'profit_by_region' %} selected {% endif %}>
+                Profit by Region
+            </option>
+            <option value="negative_profit_products" {% if request.form.get('query_type') == 'negative_profit_products' %} selected {% endif %}>
+                Products with Negative Profit
+            </option>
+        </select>
+
+        <!-- Submit button to submit the form -->
+        <button type="submit">Submit</button>
+    </form>
+
+{#    The code below this comment displays query results: if the results are tabular, they are shown in a table; if not, #}
+{#    they are displayed as preformatted text. If no results are found, a "No results to display" message is shown.#}
+
+{% if query_result is not none %}
+    <h2>Results:</h2>
+    <table class="result-table">
+        <thead>
+            <tr>
+                {% for column in query_result.columns %}
+                    <th>{{ column }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in query_result.iterrows() %}
+            <tr>
+                {% for value in row[1] %}
+                    <td>
+                        {% if value is number %}
+                            {{ '%.2f' % value }}  <!-- Formats the value to 2 decimal places -->
+                        {% else %}
+                            {{ value }}  <!-- Non-numeric values are not changed -->
+                        {% endif %}
+                    </td>
+                {% endfor %}
+            </tr>
+{% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No results to display.</p>
+{% endif %}
+
+</body>
+</html>
+
