@@ -21,7 +21,7 @@ def index():
     # Set the default result (an empty series)
     query_result = None
 
-    # According to ChatGPT, a POST request means that the form was submitted. Therefore, if request.method == 'POST':
+    # A POST request means that the form was submitted. Therefore, if request.method == 'POST':
     # will process the form's data when a POST request is submitted (i.e., when the user clicks 'Submit').
 
     if request.method == 'POST':
@@ -65,9 +65,9 @@ def index():
             query_result = query_result.reset_index()  # Convert Series to DataFrame
 
 
-# According to ChatGPT, Flask's render_template function takes an HTML template file ('index.html') and uses it to
-# create the final HTML output for the user. It also passes the required variables to the HTML template to display the
-# queries' final result. Important: this line is ONLY for displaying the form options and query results on the page!!
+# Flask's render_template function takes an HTML template file ('index.html') and uses it to create the final HTML
+# output for the user. It also passes the required variables to the HTML template to display the queries' final result.
+# Important: this line is ONLY for displaying the form options and query results on the page!!
 
     return render_template(
         'index.html',
@@ -78,9 +78,8 @@ def index():
         query_result=query_result
     )
 
-# Suggested by ChatGPT; This block starts the Flask application when the script is run directly, which saves time and
-# makes it a little bit easier to test the application. Note: it is also possible to run the application by typing
-# "flask run" into the terminal.
+# This starts the Flask application when the script is run directly, which saves time and makes it a little bit easier
+# to test the application. Note: it is also possible to run the application by typing "flask run" into the terminal.
 
 if __name__ == '__main__':
     app.run(debug=True)
